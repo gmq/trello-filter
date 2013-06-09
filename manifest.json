@@ -1,0 +1,9 @@
+{
+     "name": "Trello 'Cards View' Filter",
+     "version": "0.2",
+     "manifest_version": 2,
+     "content_scripts": [{
+         "js": ["js/jquery-2.0.2.min.js", "filter.js"],
+         "matches": ["*://trello.com/*"]
+      }]
+}
