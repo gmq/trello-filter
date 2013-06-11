@@ -1,5 +1,7 @@
 .label-list-filter {
-	padding-left: 5px !important;
+	display: inline-block !important;
+	padding: 2px 14px 2px 5px !important;
+	margin-left: 4px !important;
 }
 .list-filter {
 	vertical-align: text-top;

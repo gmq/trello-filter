@@ -13,9 +13,9 @@ var createButtons = function () {
 			$.each(lists, function (i, el) {
 				if ($.inArray(el, uniquelists) === -1) uniquelists.push(el);
 			});
-			$('<label class="button-link inline danger label-list-filter"><input type="checkbox" class="list-filter" id="filter-all" checked> All</label>').appendTo('.window-module.gutter');
+			$('<label class="button-link danger label-list-filter"><input type="checkbox" class="list-filter" id="filter-all" checked> All</label>').appendTo('.window-module.gutter');
 			$(uniquelists).each(function () {
-				$('<label class="button-link inline label-list-filter"><input type="checkbox" class="list-filter" id="filter-' + this + '"> '  + this + '</label>').appendTo('.window-module.gutter');
+				$('<label class="button-link label-list-filter"><input type="checkbox" class="list-filter" id="filter-' + this + '"> '  + this + '</label>').appendTo('.window-module.gutter');
 			});
 			$('.window-module.gutter').on('change', '.list-filter', function (e) {
 				e.preventDefault();
