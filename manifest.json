@@ -4,6 +4,7 @@
      "manifest_version": 2,
      "content_scripts": [{
          "js": ["js/jquery-2.0.2.min.js", "filter.js"],
+         "css": ["filter.css"],
          "matches": ["*://trello.com/*"]
       }]
 }

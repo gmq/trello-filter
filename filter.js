@@ -13,21 +13,34 @@ var createButtons = function () {
 			$.each(lists, function (i, el) {
 				if ($.inArray(el, uniquelists) === -1) uniquelists.push(el);
 			});
-			$('<a class="button-link list-filter inline" href="#" id="filter-all">All</a>').appendTo('.window-module.gutter');
+			$('<label class="button-link inline danger label-list-filter"><input type="checkbox" class="list-filter" id="filter-all" checked> All</label>').appendTo('.window-module.gutter');
 			$(uniquelists).each(function () {
-				$('<a href="#" class="button-link list-filter inline" id="filter-' + this + '">' + this + '</a>').appendTo('.window-module.gutter');
+				$('<label class="button-link inline label-list-filter"><input type="checkbox" class="list-filter" id="filter-' + this + '"> '  + this + '</label>').appendTo('.window-module.gutter');
 			});
-			$('.window-module.gutter').on('click', '.list-filter', function (e) {
+			$('.window-module.gutter').on('change', '.list-filter', function (e) {
 				e.preventDefault();
-				$(this).siblings('.danger').removeClass('danger');
-				$(this).addClass('danger');
 				var currentId = this.id.replace('filter-', '');
 				if (currentId == 'all') {
 					$('.list-card-container').fadeIn();
-				} else {
-					cards = $('.list-card-container').find('.list-card-position:contains("' + currentId + '")').parents('.list-card-container');
-					$(cards).fadeIn();
-					$('.list-card-container').not(cards).fadeOut();
+					$('.list-filter').not($(this)).attr('checked', false);
+					$(this).parent().siblings('.danger').removeClass('danger');
+					$(this).parent().addClass('danger');
+				}
+				else {
+					$('#filter-all').attr('checked', false);
+					$('#filter-all').parent().removeClass('danger');
+					$('.list-filter:checked').each(function() {
+						$(this).parent().addClass('danger');
+						currentId = this.id.replace('filter-', '');
+						cards = $('.list-card-container').find('.list-card-position:contains("' + currentId + '")').parents('.list-card-container').filter(':hidden');
+						$(cards).fadeIn();
+					});
+					$('.list-filter').not(':checked').each(function() {
+						$(this).parent().removeClass('danger');
+						currentId = this.id.replace('filter-', '');
+						cards = $('.list-card-container').find('.list-card-position:contains("' + currentId + '")').parents('.list-card-container');
+						$(cards).fadeOut();
+					});
 				}
 			});
 		}
