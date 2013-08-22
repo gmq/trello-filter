@@ -1,10 +1,12 @@
 {
-     "name": "Trello 'Cards View' Filter",
-     "version": "0.31",
-     "manifest_version": 2,
-     "content_scripts": [{
-         "js": ["js/jquery-2.0.2.min.js", "filter.js"],
-         "css": ["filter.css"],
-         "matches": ["*://trello.com/*"]
-      }]
+	"name": "Trello 'Cards View' Filter",
+	"version": "0.32",
+	"manifest_version": 2,
+	"content_scripts": [{
+	 "js": ["js/jquery-2.0.2.min.js", "filter.js"],
+	 "css": ["filter.css"],
+	 "matches": ["*://trello.com/*"]
+	}],
+	"icons": { "48": "trello-card-filter-48.png",
+	"128": "trello-card-filter-128.png" }
 }
