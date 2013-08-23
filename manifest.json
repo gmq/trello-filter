@@ -1,6 +1,6 @@
 {
-	"name": "Trello 'Cards View' Filter",
-	"version": "0.32",
+	"name": "'Cards View' Filter for Trello",
+	"version": "0.33",
 	"manifest_version": 2,
 	"content_scripts": [{
 	 "js": ["js/jquery-2.0.2.min.js", "filter.js"],
