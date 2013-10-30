@@ -4,6 +4,7 @@
 	margin-left: 4px !important;
     line-height: 18px;
     font-size: 14px;
+    height: auto !important;
 }
 .list-filter {
 	vertical-align: text-top;
