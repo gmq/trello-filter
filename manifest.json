@@ -1,6 +1,6 @@
 {
 	"name": "'Cards View' Filter for Trello",
-	"version": "0.34",
+	"version": "0.35",
 	"manifest_version": 2,
 	"description": "Small extension that adds filtering by list in Trello's 'Cards' view.",
 	"content_scripts": [{
