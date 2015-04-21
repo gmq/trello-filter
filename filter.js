@@ -12,11 +12,11 @@ var createButtons = function () {
 		$.each(lists, function (i, el) {
 			if ($.inArray(el, uniquelists) === -1) uniquelists.push(el);
 		});
-		$('<label class="button-link danger label-list-filter"><input type="checkbox" class="list-filter" id="filter-all" checked> All</label>').appendTo('.window-module.gutter');
+		$('<label class="button-link danger label-list-filter"><input type="checkbox" class="list-filter" id="filter-all" checked> All</label>').appendTo('.window-module.u-gutter');
 		$(uniquelists).each(function () {
-			$('<label class="button-link label-list-filter"><input type="checkbox" class="list-filter" id="filter-' + this + '"> '  + this + '</label>').appendTo('.window-module.gutter');
+			$('<label class="button-link label-list-filter"><input type="checkbox" class="list-filter" id="filter-' + this + '"> '  + this + '</label>').appendTo('.window-module.u-gutter');
 		});
-		$('.window-module.gutter').on('change', '.list-filter', function (e) {
+		$('.window-module.u-gutter').on('change', '.list-filter', function (e) {
 			e.preventDefault();
 			var currentId = this.id.replace('filter-', '');
 			if (currentId == 'all') {
