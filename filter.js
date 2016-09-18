@@ -48,21 +48,22 @@ var actualCode = '(' + function() {
       });
 
       cards.forEach((card) => {
-        listsByName[listsById[card.idList]] = true;
+        listsByName[listsById[card.idList]] = listsByName[listsById[card.idList]] || [];
+        listsByName[listsById[card.idList]].push(card);
       });
 
-      return Object.keys(listsByName);
+      return listsByName;
     }
 
     function generateDomButtons(lists) {
       let filterList = document.createElement('ul');
       filterList.className = 'filter-list';
-      lists.forEach((list) => {
+      Object.keys(lists).forEach((key) => {
         checkbox = document.createElement('input');
         checkbox.type = "checkbox";
         checkbox.className = "filter-list__checkbox";
         checkbox.name = "card-filter";
-        checkbox.value = list;
+        checkbox.value = key;
         checkbox.addEventListener('change', handleCheck);
 
         label = document.createElement('label');
@@ -71,7 +72,7 @@ var actualCode = '(' + function() {
         domList.className = 'button-link filter-list__filter';
 
         label.appendChild(checkbox);
-        label.appendChild(document.createTextNode(' ' + list));
+        label.appendChild(document.createTextNode(' ' + key + ' (' + lists[key].length + ')'));
 
         domList.appendChild(label);
 
