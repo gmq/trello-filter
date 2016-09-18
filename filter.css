@@ -11,6 +11,7 @@
   padding: 2px 14px 2px 5px !important;
   font-size: 14px !important;
   line-height: 18px !important;
+  text-transform: capitalize !important;
   cursor: pointer  !important;
 }
 
