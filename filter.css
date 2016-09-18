@@ -1,16 +1,29 @@
-.label-list-filter {
-	display: inline-block !important;
-	padding: 2px 14px 2px 5px !important;
-	margin-left: 4px !important;
-    line-height: 18px;
-    font-size: 14px;
-    height: auto !important;
+.filter-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
-.list-filter {
-	vertical-align: text-top;
+
+.filter-list__filter {
+  display: inline-block !important;
+  height: auto !important;
+  margin-left: 4px !important;
+  padding: 2px 14px 2px 5px !important;
+  font-size: 14px !important;
+  line-height: 18px !important;
+  cursor: pointer  !important;
 }
-.label-list-filter input {
-    display: inline-block !important;
-    margin: 0 5px !important;
-    vertical-align: middle !important;
+
+.filter-list__checkbox {
+  display: inline-block !important;
+  margin: 0 5px !important;
+  vertical-align: middle !important;
+}
+
+.card--filtered {
+  display: none !important;
+}
+
+.card--unfiltered {
+  display: block !important;
 }

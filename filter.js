@@ -1,63 +1,111 @@
-"use strict"
-/*global $:false, jQuery:false */
+'use strict';
 
-var createButtons = function () {
-	var cards;
-	$('#content').bind('DOMNodeInserted', function () {
-		$('#content').unbind('DOMNodeInserted');
-		var lists = $('.list-card-container').find('.list-card-position').children('strong:first-child').map(function (i, el) {
-			return $(el).text();
-		});
-		var uniquelists = [];
-		$.each(lists, function (i, el) {
-			if ($.inArray(el, uniquelists) === -1) uniquelists.push(el);
-		});
-		$('<label class="button-link danger label-list-filter"><input type="checkbox" class="list-filter" id="filter-all" checked> All</label>').appendTo('.window-module.u-gutter');
-		$(uniquelists).each(function () {
-			$('<label class="button-link label-list-filter"><input type="checkbox" class="list-filter" id="filter-' + this + '"> '  + this + '</label>').appendTo('.window-module.u-gutter');
-		});
-		$('.window-module.u-gutter').on('change', '.list-filter', function (e) {
-			e.preventDefault();
-			var currentId = this.id.replace('filter-', '');
-			if (currentId == 'all') {
-				$('.list-card-container').fadeIn();
-				$('.list-filter').not($(this)).attr('checked', false);
-				$(this).parent().siblings('.danger').removeClass('danger');
-				$(this).parent().addClass('danger');
-			}
-			else {
-				$('#filter-all').attr('checked', false);
-				$('#filter-all').parent().removeClass('danger');
-				$('.list-filter:checked').each(function() {
-					$(this).parent().addClass('danger');
-					currentId = this.id.replace('filter-', '');
-					cards = $('.list-card-container').find('.list-card-position:contains("' + currentId + '")').parents('.list-card-container').filter(':hidden');
-					$(cards).fadeIn();
-				});
-				$('.list-filter').not(':checked').each(function() {
-					$(this).parent().removeClass('danger');
-					currentId = this.id.replace('filter-', '');
-					cards = $('.list-card-container').find('.list-card-position:contains("' + currentId + '")').parents('.list-card-container');
-					$(cards).fadeOut();
-				});
-			}
-		});
-	});
-};
-var ran = 0;
-var href = window.location.href;
-if (href.substr(href.lastIndexOf('/') + 1) == 'cards') {
-	createButtons();
-	ran = 1;
-}
-setInterval(function () {
-	var href = window.location.href;
-	if (href.substr(href.lastIndexOf('/') + 1) == 'cards') {
-		if (ran === 0) {
-			ran = 1;
-			createButtons();
-		}
-	} else {
-		ran = 0;
-	}
-}, 500);
+// Script injection from: http://stackoverflow.com/a/9517879
+var actualCode = '(' + function() {
+  // XHR interception from: http://stackoverflow.com/a/13768794
+  var XHR = window.XMLHttpRequest.prototype;
+    // Remember references to original methods
+    var open = XHR.open;
+    var send = XHR.send;
+
+    // Overwrite native methods
+    // Collect data:
+    XHR.open = function(method, url) {
+        this._method = method;
+        this._url = url;
+        return open.apply(this, arguments);
+    };
+
+    // Implement "ajaxSuccess" functionality
+    XHR.send = function (postData) {
+      this.addEventListener('load', function () {
+        getAndGenerateCards(this.responseText);
+      });
+      return send.apply(this, arguments);
+    };
+
+    function getAndGenerateCards(responseText) {
+      let json;
+      let lists;
+      try {
+        json = JSON.parse(responseText);
+      } catch(error) {
+      }
+      if (json.cards && json.boards) {
+        lists = getLists(json.boards, json.cards);
+        generateDomButtons(lists);
+      }
+    }
+
+    function getLists(boards, cards) {
+      let listsById = {};
+      let listsByName = {};
+
+      boards.forEach((board) => {
+        board.lists.forEach((list) => {
+          listsById[list.id] = list.name.toLowerCase();
+        });
+      });
+
+      cards.forEach((card) => {
+        listsByName[listsById[card.idList]] = true;
+      });
+
+      return Object.keys(listsByName);
+    }
+
+    function generateDomButtons(lists) {
+      let filterList = document.createElement('ul');
+      filterList.className = 'filter-list';
+      lists.forEach((list) => {
+        checkbox = document.createElement('input');
+        checkbox.type = "checkbox";
+        checkbox.className = "filter-list__checkbox";
+        checkbox.name = "card-filter";
+        checkbox.value = list;
+        checkbox.addEventListener('change', handleCheck);
+
+        label = document.createElement('label');
+
+        domList = document.createElement('li');
+        domList.className = 'button-link filter-list__filter';
+
+        label.appendChild(checkbox);
+        label.appendChild(document.createTextNode(' ' + list));
+
+        domList.appendChild(label);
+
+        filterList.appendChild(domList);
+      });
+
+      let getWrapper = window.setInterval(function (){
+        let wrapper = document.querySelector('.tabbed-pane-main-col-wrapper .window-module.u-gutter');
+        if (wrapper){
+          wrapper.insertBefore(filterList, wrapper.firstChild);
+          window.clearInterval(getWrapper);
+        }
+      },500)
+    }
+
+    function handleCheck(event) {
+      let allCheckedFilters = Array.prototype.slice.call(document.querySelectorAll('input[name="card-filter"]:checked'));
+      let cards = Array.prototype.slice.call(document.querySelectorAll('.card-grid-container'));
+      let allCards;
+      cards.forEach((card) => {
+        position = card.querySelector('.list-card-position strong');
+        itsChecked = (allCheckedFilters.length === 0) || allCheckedFilters.find((check) => check.value == position.innerText.toLowerCase());
+        if (itsChecked) {
+          card.classList.remove('card--filtered');
+          card.classList.add('card--unfiltered');
+        } else {
+          card.classList.remove('card--unfiltered');
+          card.classList.add('card--filtered');
+        }
+      });
+    }
+} + ')();';
+
+var script = document.createElement('script');
+script.textContent = actualCode;
+(document.head || document.documentElement).appendChild(script);
+script.remove();
